@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head><title>Simple Bank</title></head>
+<body>
+<h1>Simple Bank</h1>
+
+<h2>Login</h2>
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="username" placeholder="Username" required><br>
+    <input type="password" name="password" placeholder="Password" required><br>
+    <input type="submit" name="login" value="Login">
+</form>
+
+<h2>Register</h2>
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="reg_username" placeholder="Username" required><br>
+    <input type="password" name="reg_password" placeholder="Password" required><br>
+    <input type="submit" name="register" value="Register">
+</form>
+
+{% if messages %}
+<ul>
+{% for message in messages %}
+<li>{{ message }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+</body>
+</html>
