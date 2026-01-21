@@ -1,0 +1,17 @@
+{% extends 'banking/base.html' %}
+
+{% block content %}
+<h2>Search Results</h2>
+<p>Search query: "{{ query }}"</p>
+
+{% for transaction in transactions %}
+<div class="card">
+    <p>{{ transaction.description }} - ${{ transaction.amount }}</p>
+    <small>Account: {{ transaction.account.account_number }} | {{ transaction.created_at|date:"M d, Y" }}</small>
+</div>
+{% empty %}
+<p>No transactions found.</p>
+{% endfor %}
+
+<p><a href="{% url 'banking:dashboard' %}">Back to Dashboard</a></p>
+{% endblock %}

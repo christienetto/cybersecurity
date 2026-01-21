@@ -1,0 +1,22 @@
+{% extends 'banking/base.html' %}
+
+{% block content %}
+<h2>Account Details</h2>
+<div class="card">
+    <h3>Account: {{ account.account_number }}</h3>
+    <p>Owner: {{ account.owner.username }}</p>
+    <p>Balance: ${{ account.balance }}</p>
+    <p>Created: {{ account.created_at|date:"M d, Y" }}</p>
+    <a href="{% url 'banking:update_settings' account.id %}">Settings</a>
+</div>
+
+<h3>Recent Transactions</h3>
+{% for transaction in transactions %}
+<div class="card">
+    <p>{{ transaction.description }} - ${{ transaction.amount }}</p>
+    <small>{{ transaction.created_at|date:"M d, Y H:i" }}</small>
+</div>
+{% empty %}
+<p>No transactions yet.</p>
+{% endfor %}
+{% endblock %}

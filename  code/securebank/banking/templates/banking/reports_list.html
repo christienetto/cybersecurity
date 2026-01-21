@@ -1,0 +1,48 @@
+{% extends 'scanner/base.html' %}
+
+{% block title %}Reports - Security Audit Tool{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Security Reports</h1>
+    
+    {% if reports %}
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background-color: #f8f9fa;">
+                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">Scan ID</th>
+                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">Target URL</th>
+                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">Total Vulnerabilities</th>
+                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">Critical</th>
+                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">High</th>
+                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">Generated</th>
+                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for report in reports %}
+                    <tr>
+                        <td style="padding: 1rem; border-bottom: 1px solid #dee2e6;">#{{ report.scan.id }}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid #dee2e6;">{{ report.scan.target_url }}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid #dee2e6;">{{ report.total_vulnerabilities }}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid #dee2e6;">
+                            <span class="severity-critical">{{ report.critical_count }}</span>
+                        </td>
+                        <td style="padding: 1rem; border-bottom: 1px solid #dee2e6;">
+                            <span class="severity-high">{{ report.high_count }}</span>
+                        </td>
+                        <td style="padding: 1rem; border-bottom: 1px solid #dee2e6;">{{ report.generated_at|date:"M d, Y" }}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid #dee2e6;">
+                            <a href="{% url 'scanner:scan_detail' report.scan.id %}" class="btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">View Report</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No security reports available. <a href="{% url 'scanner:create_scan' %}">Run a security scan</a> to generate reports.</p>
+    {% endif %}
+</div>
+{% endblock %}

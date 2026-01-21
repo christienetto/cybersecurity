@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head><title>Simple Bank</title></head>
+<body>
+<h1>Simple Bank</h1>
+
+<table>
+<tr><th>Username:</th><td>{{ user.username }}</td></tr>
+</table>
+
+<form action="logout/" method="POST">
+{% csrf_token %}
+<input type="submit" value="Logout"/>
+</form>
+
+<h2>Your IBAN accounts</h2>
+<ul>
+{% for account in accounts %}
+<li>{{ account.account_number }} : ${{ account.balance }}</li>
+{% endfor %}
+</ul>
+
+<h2>Add money (FLAW 5: No access control)</h2>
+<form method="GET">
+<input type="hidden" name="add" value="1">
+<span>TO:</span><br/>
+<input type="text" name="to" placeholder="IBAN number"/><br/>
+<span>Amount:</span><br/>
+<input type="number" name="amount"/><br/>
+<input type="submit" value="Add Money!"/>
+</form>
+
+<h2>Delete account (FLAW 5: No access control)</h2>
+<form method="GET">
+<input type="hidden" name="delete" value="1">
+<span>IBAN:</span><br/>
+<input type="text" name="iban"/><br/>
+<input type="submit" value="Delete!"/>
+</form>
+
+<h2>Create account (FLAW 6: CSRF via GET)</h2>
+<form method="GET">
+<input type="hidden" name="create" value="1">
+<label>IBAN: </label><input type="text" name="iban"/><br/>
+<label>Password: </label><input type="password" name="password"/><br/>
+<input type="submit" value="Create"/>
+</form>
+
+<h2>Search transactions (FLAW 2: SQL Injection)</h2>
+<form method="GET">
+<input type="hidden" name="search" value="1">
+<input type="text" name="q" placeholder="Search term"/>
+<input type="submit" value="Search"/>
+</form>
+
+<h2>Debug info (FLAW 3: Data exposure)</h2>
+<a href="?debug=1">Show debug info</a>
+{% if debug_info %}
+<ul>
+<li>User ID: {{ debug_info.user_id }}</li>
+<li>Session: {{ debug_info.session }}</li>
+<li>Secret: {{ debug_info.secret }}</li>
+<li>DB Password: {{ debug_info.db_pass }}</li>
+</ul>
+{% endif %}
+
+{% if messages %}
+<ul>
+{% for message in messages %}
+<li>{{ message }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+</body>
+</html>
