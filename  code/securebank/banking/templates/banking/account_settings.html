@@ -1,0 +1,45 @@
+{% extends 'banking/base.html' %}
+
+{% block title %}Account Settings - SecureBank{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Account Settings</h1>
+    <p>Account: {{ account.account_number }} - {{ account.get_account_type_display }}</p>
+    
+    <!-- FLAW 6: CSRF - Form without CSRF token -->
+    <!-- Vulnerable: Missing {% csrf_token %} makes this form vulnerable to CSRF attacks -->
+    <form method="post">
+        <!-- FIX: Add CSRF token -->
+        <!-- {% csrf_token %} -->
+        
+        <div class="form-group">
+            <label for="status">Account Status:</label>
+            <select name="status" id="status">
+                <option value="active" {% if account.status == 'active' %}selected{% endif %}>Active</option>
+                <option value="suspended" {% if account.status == 'suspended' %}selected{% endif %}>Suspended</option>
+                <option value="closed" {% if account.status == 'closed' %}selected{% endif %}>Closed</option>
+            </select>
+        </div>
+        
+        {% if account.account_type == 'credit' %}
+        <div class="form-group">
+            <label for="credit_limit">Credit Limit:</label>
+            <input type="number" name="credit_limit" id="credit_limit" 
+                   value="{{ account.credit_limit|default:'' }}" 
+                   step="0.01" min="0" placeholder="0.00">
+        </div>
+        {% endif %}
+        
+        <div style="margin-top: 2rem;">
+            <button type="submit" class="btn btn-success">Update Settings</button>
+            <a href="{% url 'banking:account_detail' account.id %}" class="btn">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<div class="card">
+    <h3>Security Notice</h3>
+    <p>Changing account status to 'Closed' will prevent all future transactions. This action cannot be undone without contacting customer service.</p>
+</div>
+{% endblock %}
