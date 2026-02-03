@@ -1,0 +1,18 @@
+{% extends 'banking/base.html' %}
+
+{% block content %}
+<h2>Transfer Money</h2>
+<form method="post">
+    {% csrf_token %}
+    <p>From Account:
+        <select name="from_account" required>
+            {% for account in accounts %}
+            <option value="{{ account.id }}">{{ account.account_number }} (${{ account.balance }})</option>
+            {% endfor %}
+        </select>
+    </p>
+    <p>To Account: <input type="text" name="to_account" placeholder="Account number" required></p>
+    <p>Amount: <input type="number" name="amount" step="0.01" min="0.01" required></p>
+    <button type="submit">Transfer</button>
+</form>
+{% endblock %}

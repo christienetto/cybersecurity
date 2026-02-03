@@ -1,0 +1,55 @@
+{% extends 'banking/base.html' %}
+
+{% block title %}Transaction History - SecureBank{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1>Transaction History</h1>
+    
+    <div style="margin-bottom: 2rem;">
+        <form method="get" action="{% url 'banking:search_transactions' %}" style="display: flex; gap: 1rem;">
+            <input type="text" name="q" placeholder="Search transactions..." style="flex: 1; padding: 0.75rem;">
+            <button type="submit" class="btn">Search</button>
+        </form>
+    </div>
+    
+    {% if transactions %}
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background-color: #f8f9fa;">
+                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">Date</th>
+                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">Account</th>
+                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">Reference</th>
+                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">Description</th>
+                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">Type</th>
+                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">Amount</th>
+                        <th style="padding: 1rem; text-align: left; border-bottom: 2px solid #dee2e6;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                    <tr>
+                        <td style="padding: 1rem; border-bottom: 1px solid #dee2e6;">{{ transaction.created_at|date:"M d, Y H:i" }}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid #dee2e6;">{{ transaction.account.account_number }}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid #dee2e6;">{{ transaction.reference_number }}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid #dee2e6;">{{ transaction.description }}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid #dee2e6;">{{ transaction.get_transaction_type_display }}</td>
+                        <td style="padding: 1rem; border-bottom: 1px solid #dee2e6;" class="{% if transaction.amount >= 0 %}balance-positive{% else %}balance-negative{% endif %}">
+                            ${{ transaction.amount|floatformat:2 }}
+                        </td>
+                        <td style="padding: 1rem; border-bottom: 1px solid #dee2e6;">{{ transaction.get_status_display }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No transactions found.</p>
+    {% endif %}
+</div>
+
+<div style="text-align: center; margin-top: 2rem;">
+    <a href="{% url 'banking:dashboard' %}" class="btn">Back to Dashboard</a>
+</div>
+{% endblock %}
