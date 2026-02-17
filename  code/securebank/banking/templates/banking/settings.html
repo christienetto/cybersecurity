@@ -1,0 +1,21 @@
+{% extends 'banking/base.html' %}
+
+{% block content %}
+<h2>Account Settings</h2>
+<div class="card">
+    <h3>Account: {{ account.account_number }}</h3>
+    <p>Current Balance: ${{ account.balance }}</p>
+    
+    <div class="alert alert-error">
+        <strong>🚨 FLAW 6: CSRF Vulnerability</strong><br>
+        This form is missing CSRF protection - malicious sites can perform actions on behalf of users!
+    </div>
+    
+    <form method="post">
+        <!-- VULNERABLE: No CSRF token -->
+        <p>Update Balance: <input type="number" name="balance" step="0.01" value="{{ account.balance }}"></p>
+        <button type="submit">Update</button>
+    </form>
+</div>
+<p><a href="{% url 'banking:account_detail' account.id %}">Back to Account</a></p>
+{% endblock %}
