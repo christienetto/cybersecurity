@@ -12,7 +12,7 @@ A vulnerable Django banking application with 5 critical security flaws from the 
 - `banking/screenshots/AFTER` - after the fix flaw
 
 Note! 
-I have used the BEFORE directory to showcase the flaw, for example flaw-1-before-1.png , to show how to reproduce the flaw right before the actual flaw execution and  flaw-1-after-1.png is what the flaw should show afterwards. The AFTER directory in screenshots are what the flaw looks like after the fix, I apologize for the using the same naming convention (flaw-1-afterfix-1.png). I wanted the user to see how exctly to reproduce this flaw by looking at the screenshots.  
+I have used the BEFORE directory to showcase the flaw, for example flaw-1-before-1.png , to show how to reproduce the flaw right before the actual flaw execution and  flaw-1-after-1.png is what the flaw should show afterwards. The AFTER directory in screenshots are what the flaw looks like after the fix, I apologize for the using the same naming convention (flaw-1-after-1.png). I wanted the user to see how exctly to reproduce this flaw by looking at the screenshots.  
 
 ## Installation & Setup
 
