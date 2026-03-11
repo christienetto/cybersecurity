@@ -60,7 +60,7 @@ def dashboard(request):
     
     if request.method == 'GET':
         if 'add' in request.GET:
-            # Add money - FLAW 5: No access control
+            # Add money - FLAW 4: No access control
             to_account = request.GET.get('to')
             amount = request.GET.get('amount')
             if to_account and amount:
@@ -85,7 +85,7 @@ def dashboard(request):
                     messages.error(request, 'Account not found')
         
         elif 'delete' in request.GET:
-            # Delete account - FLAW 5: No access control
+            # Delete account - FLAW 4: No access control
             iban = request.GET.get('iban')
             if iban:
                 try:
@@ -103,7 +103,7 @@ def dashboard(request):
                     messages.error(request, 'Account not found')
         
         elif 'create' in request.GET:
-            # Create account - FLAW 6: CSRF via GET
+            # Create account - FLAW 5: CSRF via GET
             iban = request.GET.get('iban')
             password = request.GET.get('password')
             if iban and password:
