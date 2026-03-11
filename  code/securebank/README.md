@@ -8,6 +8,11 @@ A vulnerable Django banking application with 5 critical security flaws from the 
 - `banking/models.py` - Simple Account and Transaction models
 - `banking/templates/` - Minimal HTML templates
 - `banking/urls.py` - URL routing
+- `banking/screenshots/BEFORE` - before the fix for the flaw
+- `banking/screenshots/AFTER` - after the fix flaw
+
+Note! 
+I have used the BEFORE directory to showcase the flaw, for example flaw-1-before-1.png , to show how to reproduce the flaw right before the actual flaw execution and  flaw-1-after-1.png is what the flaw should show afterwards. The AFTER directory in screenshots are what the flaw looks like after the fix, I apologize for the using the same naming convention (flaw-1-afterfix-1.png). I wanted the user to see how exctly to reproduce this flaw by looking at the screenshots.  
 
 ## Installation & Setup
 
@@ -46,12 +51,13 @@ Access at: `http://localhost:8000/`
 **Location:** `banking/views.py` lines 97-104  
 **Issue:** Debug information exposed via URL parameter (scroll a little bit down) 
 **Exploit:** Visit `http://localhost:8000/?debug=1` to see sensitive data**Fix:** Commented code shows that only admin can access and debug 
+**Fix:** Redirects to the login page
 
 ### FLAW 4: Broken Access Control (A01:2021)
 **Location:** `banking/views.py` lines 45-52 and 65-72  
 **Issue:** No ownership verification, users can modify any account  
 **Exploit:** Add money to any IBAN or delete any account  
-**Fix:** Commented code shows proper ownership verification before operations
+**Fix:** Commented code shows proper ownership verification before operations, would not allow you to add to another's account.
 
 ### FLAW 5: Cross-Site Request Forgery (CSRF)
 **Location:** `banking/views.py` lines 75-82  
