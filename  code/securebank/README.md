@@ -42,9 +42,11 @@ Access at: `http://localhost:8000/`
 **Fix:** Commented code has proper password complexity validation (8+ chars, uppercase, lowercase, numbers)
 
 ### FLAW 2: Injection - SQL Injection (A03:2021)
-**Location:** `banking/views.py` lines 85-87  
-**Issue:** Raw SQL query with unsanitized user input  
-**Exploit:** Search for: `'; DROP TABLE banking_transaction; --`  
+**Location:** `banking/views.py` lines 121-138  
+**Issue:** Raw SQL query with unsanitized user input in LIKE clause  
+**Exploit:** Search for: `' OR '1'='1' --` to retrieve all transactions instead of just matching ones  
+**Alternative Exploit:** `' UNION SELECT name FROM sqlite_master WHERE type='table' AND '1'='1` to enumerate database tables  
+**Note:** DROP TABLE won't work due to SQLite's single-statement execution limit and cursor constraints  
 **Fix:** Commented code shows Django ORM usage instead of raw SQL
 
 ### FLAW 3: Security Misconfiguration (A05:2021)
@@ -68,7 +70,7 @@ Access at: `http://localhost:8000/`
 ## How to Test Vulnerabilities
 
 1. **Weak Passwords:** Register with username "test" and password "12"
-2. **SQL Injection:** Search for `test'; SELECT 1; --` in the search transactions area and observe database errors/ success (in the bottom)
+2. **SQL Injection:** Search for `' OR '1'='1' --` in the search transactions area to retrieve all transactions instead of just matching ones
 3. **Data Exposure:** Add `?debug=1` to any URL to see sensitive information, scroll a little bit down and some debug data should be shown
 4. **Access Control:** Try adding money to random IBAN numbers or deleting accounts you don't own, perhaps first register for two users and check if you can delete the other ones account
 5. **CSRF:** Create malicious links that perform actions when clicked by logged-in users, like go to `http://localhost:8000/?create=1&iban=HACK1234&password=test`
