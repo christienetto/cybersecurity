@@ -45,8 +45,6 @@ Access at: `http://localhost:8000/`
 **Location:** `banking/views.py` lines 121-138  
 **Issue:** Raw SQL query with unsanitized user input in LIKE clause  
 **Exploit:** Search for: `' OR '1'='1' --` to retrieve all transactions instead of just matching ones  
-**Alternative Exploit:** `' UNION SELECT name FROM sqlite_master WHERE type='table' AND '1'='1` to enumerate database tables  
-**Note:** DROP TABLE won't work due to SQLite's single-statement execution limit and cursor constraints  
 **Fix:** Commented code shows Django ORM usage instead of raw SQL
 
 ### FLAW 3: Security Misconfiguration (A05:2021)

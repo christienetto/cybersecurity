@@ -118,17 +118,17 @@ def dashboard(request):
                 except:
                     messages.error(request, 'Could not create account')
         
-         elif 'search' in request.GET:
-             # Search - FLAW 2: SQL Injection
-             query = request.GET.get('q', '')
-             if query:
-                 # VULNERABLE: Raw SQL injection via LIKE clause
-                 # Attacker can inject: ' OR '1'='1' -- to return all transactions
-                 # Or use: ' UNION SELECT ... FROM ... -- for data extraction
-                 # Note: DROP TABLE won't work due to SQLite's single-statement execution limit
-                 sql = f"SELECT * FROM banking_transaction WHERE description LIKE '%{query}%'"
-                 # FIX: Use parameterized queries or Django ORM:
-                 # transactions = Transaction.objects.filter(description__icontains=query, account__owner=request.user)
+        elif 'search' in request.GET:
+            # Search - FLAW 2: SQL Injection
+            query = request.GET.get('q', '')
+            if query:
+                # VULNERABLE: Raw SQL injection via LIKE clause
+                # Attacker can inject: ' OR '1'='1' -- to return all transactions
+                # Or use: ' UNION SELECT ... FROM ... -- for data extraction
+                # Note: DROP TABLE won't work due to SQLite's single-statement execution limit
+                sql = f"SELECT * FROM banking_transaction WHERE description LIKE '%{query}%'"
+                # FIX: Use parameterized queries or Django ORM:
+                # transactions = Transaction.objects.filter(description__icontains=query, account__owner=request.user)
                 try:
                     with connection.cursor() as cursor:
                         cursor.execute(sql)
