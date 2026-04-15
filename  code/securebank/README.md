@@ -36,7 +36,7 @@ Access at: `http://localhost:8000/`
 ## Security Vulnerabilities
 
 ### FLAW 1: Broken Authentication (A07:2021)
-**Location:** `banking/views.py` lines 18-22  
+**Location:** `banking/views.py` lines 27-39  
 **Issue:** Password only requires 2 characters minimum  
 **Exploit:** Register with password "12"  
 **Fix:** Commented code has proper password complexity validation (8+ chars, uppercase, lowercase, numbers)
@@ -48,19 +48,19 @@ Access at: `http://localhost:8000/`
 **Fix:** Commented code shows Django ORM usage instead of raw SQL
 
 ### FLAW 3: Security Misconfiguration (A05:2021)
-**Location:** `banking/views.py` lines 97-104  
-**Issue:** Debug information exposed via URL parameter (scroll a little bit down) 
-**Exploit:** Visit `http://localhost:8000/?debug=1` to see sensitive data**Fix:** Commented code shows that only admin can access and debug 
-**Fix:** Redirects to the login page
+**Location:** `banking/views.py` lines 143-156  
+**Issue:** Debug information exposed via URL parameter  
+**Exploit:** Visit `http://localhost:8000/?debug=1` to see sensitive data  
+**Fix:** Commented code shows that only admin can access debug info
 
 ### FLAW 4: Broken Access Control (A01:2021)
-**Location:** `banking/views.py` lines 45-52 and 65-72  
+**Location:** `banking/views.py` lines 63 and 88  
 **Issue:** No ownership verification, users can modify any account  
 **Exploit:** Add money to any IBAN or delete any account  
 **Fix:** Commented code shows proper ownership verification before operations, would not allow you to add to another's account.
 
 ### FLAW 5: Cross-Site Request Forgery (CSRF)
-**Location:** `banking/views.py` lines 75-82  
+**Location:** `banking/views.py` lines 106-119  
 **Issue:** Critical operations via GET requests without CSRF protection  
 **Exploit:** Malicious links can create accounts: `http://localhost:8000/?create=1&iban=HACK1234&password=test`  
 **Fix:** Commented code shows POST requests with CSRF token validation
